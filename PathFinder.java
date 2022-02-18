@@ -6,10 +6,9 @@ public class PathFinder {
     public static void main(String[] args) {
         
         // the plan in 2D array
-        int[][] plan = { { 1, -1, 1, 1, 1, 1, 1}, 
-                         { 1, -1, -1, -1, 1, -1, 1}, 
-                         { 0, 1, 1, -1, 1, 1, 1},
-                         { 1, 1, 1, 1, 1, 2, 1}};
+        int[][] plan = { { 0, -1, 1, 1, 1}, 
+                         { 1, 1, -1, -1, 1}, 
+                         { 1, 1, 1, -1, 2}};
         
         // RootNode and TargetNode finder
         Node RootNode = new Node(0,0);
@@ -81,9 +80,7 @@ static void DFS(NodeList nodeList, Node rootNode, Node targetNode){
     boolean found = false;  //a flag, set true when the goal is found
     int explored = 1;  //num of explored nodes untill we reach the goal, initialized to 1 cuz we have counted the root as explored
     Stack<Node> stk = new Stack<>(); //stack that the dfs uses
-    //ArrayList visited = new ArrayList(); //remove the comment if the dfs got stuck in an infinite loop, it adds a visited array
-                                          //that counts all the visited nodes so we wont visited them again
-                                         //you also have to remove comments on lines 113,115,116 for this to wrok
+    ArrayList visited = new ArrayList(); //added a visited array to avoid getting stuck in infinite loops
     stk.add(rootNode);
     
     while (!stk.isEmpty()){
@@ -111,10 +108,10 @@ static void DFS(NodeList nodeList, Node rootNode, Node targetNode){
             ArrayList<Node> neigh = nodeList.Neigh(head); //getting the neighbors of the head
             for (int i = neigh.size()-1; i >= 0; i--) {
                 if ((!neigh.get(i).equals(head.parent)) || (!neigh.get(i).equals(head.parent.parent)) || (!neigh.get(i).equals(head.parent.parent.parent)) || (!neigh.get(i).equals(head.parent.parent.parent.parent)) || (!neigh.get(i).equals(head.parent.parent.parent.parent.parent))) { //making sure we dont revisit the parent of the head
-                    //if (!visited.contains(neigh.get(i))) {  //!!! remove comment if you added the visited array !!!
+                    if (!visited.contains(neigh.get(i))) {
                         stk.add(neigh.get(i));
-                        //visited.add(neigh.get(i));  //!!! remove comment if you added the visited array !!!
-                    //}  //!!! remove comment if you added the visited array !!!
+                        visited.add(neigh.get(i));
+                    }
                 }
             }
         }
